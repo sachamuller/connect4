@@ -76,6 +76,8 @@ class DQN_Skeleton:
 
         self.env = env
 
+        self.name = "DQN Agent"
+
         self.reset()
 
     def get_action(self, state, epsilon=None):
@@ -101,7 +103,7 @@ class DQN_Skeleton:
         ** SOLUTION **
         """
         if state is None or next_state is None:
-            return -1
+            return None
 
         state_tensor = self.state_observation_to_DQN_input(state["observation"])
         next_state_tensor = self.state_observation_to_DQN_input(state["observation"])
@@ -116,13 +118,10 @@ class DQN_Skeleton:
         )
 
         if len(self.buffer) < self.batch_size:
-            return np.inf
+            return None
 
         # get batch
         transitions = self.buffer.sample(self.batch_size)
-
-        # Compute loss - TO BE IMPLEMENTED!
-        # Hint: use the gather method from torch.
 
         (
             state_batch,
@@ -208,13 +207,23 @@ class DQN_Skeleton:
 
 
 class RandomAgent:
-    def __init__(self, observation_space, action_space):
-        self.action_space = action_space
-        return
+    def __init__(self):
+        self.name = "Random Agent"
 
-    def get_action(self, state, *args):
+    def get_action(self, state, *args, **kwargs):
         playable_moves = np.where(state["action_mask"] == 1)[0]
         return np.random.choice(playable_moves)
 
     def update(self, *data):
         pass
+
+
+class PlayLeftmostLegal:
+    def __init__(self):
+        self.name = "Left Player"
+
+    def get_action(self, obs_mask, epsilon=None):
+        for i, legal in enumerate(obs_mask["action_mask"]):
+            if legal:
+                return i
+        return None
