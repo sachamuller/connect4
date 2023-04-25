@@ -33,6 +33,7 @@ class UserPlayer(Agent):
         possible_moves = list(np.where(obs["action_mask"])[0])
         move = -1
         plt.imshow(env.render())
+        plt.axis("off")
         plt.show()
         while int(move) not in possible_moves:
             move = input(f"Choose a move among those ones: {possible_moves}")

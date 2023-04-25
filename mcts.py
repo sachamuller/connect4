@@ -113,20 +113,22 @@ class MonteCarloTreeSearchNode:
 
     def backpropagate(self, result: int, distance: int):
         self._number_of_visits += 1
-        if distance > 0:
+        if distance > 1:
             self._results[result] += 1 / distance
+        if distance == 1:
+            self._results[result] += 1000
         else:
             self._results[result] += 2
 
         if self.parent:
             self.parent.backpropagate(result, distance + 1)
 
-    def get_action_weight(self, action: int, c_param=np.sqrt(2)):
+    def get_action_weight(self, action: int, c_param=1):
         return self.children[action].q / self.children[action].n + c_param * np.sqrt(
             2 * np.log(self.n) / self.children[action].n
         )
 
-    def best_child(self, c_param=np.sqrt(2)) -> int:
+    def best_child(self, c_param=1) -> int:
         best_action = max(
             self.state.legal_actions,
             key=lambda action: self.get_action_weight(action, c_param),
