@@ -57,6 +57,7 @@ class DQN_Skeleton:
         epsilon_min,
         learning_rate,
         env,
+        name=None,
     ):
         self.action_space_size = action_space_size
         self.observation_space_size = observation_space_size
@@ -76,7 +77,7 @@ class DQN_Skeleton:
 
         self.env = env
 
-        self.name = "DQN Agent"
+        self.name = "DQN Agent" if name is None else name
 
         self.reset()
 
