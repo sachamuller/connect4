@@ -106,7 +106,9 @@ class DQN_Skeleton:
             return None
 
         state_tensor = self.state_observation_to_DQN_input(state["observation"])
-        next_state_tensor = self.state_observation_to_DQN_input(state["observation"])
+        next_state_tensor = self.state_observation_to_DQN_input(
+            next_state["observation"]
+        )
 
         # add data to replay buffer
         self.buffer.push(
@@ -177,10 +179,14 @@ class DQN_Skeleton:
         )
 
     def state_observation_to_DQN_input(
-        self, state_observation, my_value=1, ennemy_value=2
+        self, state_observation, my_pov=True, my_value=1, ennemy_value=2
     ):
-        my_pieces = 0
-        adverse_pieces = 1
+        if my_pov:
+            my_pieces = 0
+            adverse_pieces = 1
+        else:
+            my_pieces = 1
+            adverse_pieces = 0
         result = np.zeros(state_observation.shape[:2])
         result[np.where(state_observation[:, :, my_pieces] == 1)] = my_value
         result[np.where(state_observation[:, :, adverse_pieces] == 1)] = ennemy_value
