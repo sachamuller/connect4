@@ -112,11 +112,11 @@ class DQN_Skeleton:
 
         # add data to replay buffer
         self.buffer.push(
-            torch.tensor(state_tensor).unsqueeze(0),
+            state_tensor.unsqueeze(0),
             torch.tensor([[action]], dtype=torch.int64),
             torch.tensor([reward]),
             torch.tensor([terminated], dtype=torch.int64),
-            torch.tensor(next_state_tensor).unsqueeze(0),
+            next_state_tensor.unsqueeze(0),
         )
 
         if len(self.buffer) < self.batch_size:
